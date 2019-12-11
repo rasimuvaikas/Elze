@@ -1,0 +1,461 @@
+initial: Kaip laikaisi?  Papasakok man, kas yra.
+final: Viso. Ačiū už pokalbį.
+quit: ate
+quit: viso
+quit: iki
+quit: sudie
+quit: čiau
+quit: viso gero
+pre: atsimenu prisimenu
+pre: sapnai sapnas
+pre: gal galbūt
+pre: kaip ką
+pre: kada ką
+pre: mašina kompiuteris
+pre: kompiuteriai kompiuteris
+pre: primeni panaši
+pre: jo taip
+pre: aha taip
+post: aš tu
+post: mano tavo
+post: manęs tavęs
+post: man tau
+post: mane tave
+post: manimi tavimi
+post: manim tavim
+post: tu aš
+post: tavo mano
+post: tavęs manęs
+post: tau man
+post: tave mane
+post: tavimi manimi
+post: tavim manim
+synon: tikiu jaučiu galvoju tikiu manau norėčiau
+synon: šeima šeimos šeimai šeimą motina motinos motinai motiną mama mamos mamai mamą tėvas tėvo tėvui tėva tėvu tėtis tėčio tėčiui tėtį tėčiu sesuo seseries seseriai seserį seserimi sesė sesės sesei sesę sese brolis brolio broliui brolį broliu žmona žmonos žmonai žmoną vaikai vaikų vaikams vaikus vaikais vaikas vaiko vaikui vaiką vaiku
+synon: trokštu noriu
+synon: liūdnas nelaimingas nusiminęs pavargęs liūdna nelaiminga nusiminus nusiminusi pavargus pavargusi liūdna sunku bloga negera skaudu
+synon: laimingas pakylėtas patenkintas linksmas laiminga pakylėta patenkinta linksma
+synon: negaliu nemoku
+synon: visi kiekvienas niekas
+synon: būti esu yra esi esame buvo buvau buvai buvome
+key: jūs 5
+  decomp: * jūs *
+    reasmb: Kreipkis į mane "tu".
+    reasmb: Juk jau sakiau, kad gali kreiptis į mane "tu".
+key: xnone
+  decomp: *
+    reasmb: Nesu tikra, ar gerai supratau.
+    reasmb: Tęsk.
+    reasmb: Ką tai tau galėtų reikšti?
+    reasmb: Kaip jautiesi, kai tenka apie tai kalbėti?
+key: atsiprašau
+  decomp: *
+    reasmb: Nereikia atsiprašinėti.
+    reasmb: Atsiprašymai nėbūtini.
+    reasmb: Juk jau sakiau, kad atsiprašyti nebūtina.
+key: atsiprašyti
+  decomp: *
+    reasmb: goto atsiprašau
+key: prisimenu 5
+  decomp: * aš prisimenu *
+    reasmb: Ar dažnai apie tai galvoji?
+    reasmb: Ar, kai galvoji apie (2), prisimeni dar ką nors?
+    reasmb: Ką dar prisimeni?
+    reasmb: Kodėl būtent dabar prisiminei (2)?
+    reasmb: Kuo dabartinės aplinkybės tau primena (2)?
+    reasmb: Kodėl aš tau primenu (2)?
+  decomp: * ar * prisimeni *
+    reasmb: Manei, kad pamiršiu (3) ?
+    reasmb: Kodėl tau atrodo svarbu, kad dabar prisiminčiau (3)?
+    reasmb: Ką prisimeni apie (3)?
+    reasmb: goto ką
+    reasmb: Anksčiau jau minėjai (3)?
+key: jei 3
+  decomp: *jei *
+    reasmb: Ar manai, kad tikėtina, jog (2)?
+    reasmb: Ar norėtum, kad (2)?
+    reasmb: O kas jei (2)?
+    reasmb: Tikrai? Jei (2)?
+key: sapnavau 4
+  decomp: * aš sapnavau *
+    reasmb: Tikrai? (2)?
+    reasmb: Ar kadanors fantazavai apie (2)?
+    reasmb: Ar kada nors prieš tai esi sapnavęs (2)?
+	reasmb: goto sapnas
+key: sapnas 3
+  decomp: *
+    reasmb: Ką toks sapnas galėtų reikšti?
+    reasmb: Ar dažnai sapnuoji?
+    reasmb: Kokių žmonių sutinki savo sapnuose?
+    reasmb: Ar manai, kad sapnai gali turėti įtakos tavo problemoms?
+key: sapno 3
+  decomp: *
+    reasmb: goto sapnas
+key: sapne 3
+  decomp: *
+    reasmb: goto sapnas
+key: sapną 3
+  decomp: *
+    reasmb: goto sapnas
+key: sapnu 3
+  decomp: *
+    reasmb: goto sapnas
+key: galbūt
+  decomp: *
+    reasmb: Gal?
+    reasmb: Kodėl dvejoji?
+    reasmb: Kas tau kelia abejonių?
+    reasmb: Bet abejoji?
+key: vardas 15
+  decomp: *
+    reasmb: Vardai man nėra svarbūs.
+    reasmb: Kaip jau sakiau, vardų minėti nereikia. Prašau tęsk.
+key: vardu 15
+  decomp: *
+    reasmb: goto vardas
+key: vardo 15
+  decomp: *
+    reasmb: goto vardas
+key: vardą 15
+  decomp: *
+    reasmb: goto vardas
+key: deutsch
+  decomp: *
+    reasmb: goto xforeign
+    reasmb: Juk jau sakiau, kad nesuprantu vokiškai.
+key: français
+  decomp: *
+    reasmb: goto xforeign
+    reasmb: Juk jau sakiau, kad nesuprantu prancūziškai.
+key: italiano
+  decomp: *
+    reasmb: goto xforeign
+    reasmb: Juk jau sakiau, kad nesuprantu itališkai.
+key: espanol
+  decomp: *
+    reasmb: goto xforeign
+    reasmb: Juk jau sakiau, kad nesuprantu ispaniškai.
+key: english
+  decomp: *
+    reasmb: goto xforeign
+    reasmb: Juk jau sakiau, kad nesuprantu angliškai.
+key: xforeign
+  decomp: *
+    reasmb: Aš kalbu tik lietuvių kalba.
+key: labas
+  decomp: *
+    reasmb: Kaip laikaisi? Papasakok, kas neramina.
+    reasmb: Labas. Apie ką norėtum pasikalbėti?
+key: kompiuteris 50
+  decomp: *
+    reasmb: Ar kompiuteriai tave gąsdina?
+    reasmb: Kodėl kalbi apie kompiuterius?
+    reasmb: Kaip manai, kaip mašinos galėtu būti susijusios su tavo problemomis?
+    reasmb: Ar nemanai, kad kompiuteriai ateša naudą žmonėms?
+    reasmb: Dėl ko būtent tave gąsdina mašinos?
+    reasmb: Ką manai apie mašinas?
+key: kompiuterį 50
+  decomp: *
+    reasmb: goto kompiuteris
+key: kompiuteriu 50
+  decomp: *
+    reasmb: goto kompiuteris
+key: kompiuterio 50
+  decomp: *
+    reasmb: goto kompiuteris
+key: esu
+  decomp: * ar aš esu *
+    reasmb: Ar manai, kad esi (2)?
+    reasmb: Ar norėtum būti (2)?
+    reasmb: Ar norėtum, kad pasakyčiau tau, jog esi (2)?
+    reasmb: Ką tai reikštų, jeigu tu būtum (2)?
+    reasmb: goto ką
+  decomp: *
+    reasmb: Kodėl sakai "esu"?
+    reasmb: Nelabai suprantu.
+key: esi
+  decomp: * ar tu esi *
+    reasmb: Kodėl tau įdomu, ar aš esu (2) ar ne?
+    reasmb: Ar tau labiau patiktų jeigu aš nebūčiau (2)?
+    reasmb: Galbūt tavo svajonėse aš esu (2)?
+    reasmb: Ar kartais galvoji, kad esu (2)?
+    reasmb: goto ką
+key: yra
+  decomp: * jie * yra *
+    reasmb: Ar esi pagalvojęs, kad gal jie nėra (3)?
+    reasmb: Ar tau patiktų, jeigu jie nebūtų (3)?
+    reasmb: O gal jie visai nėra (3)?
+    reasmb: Galbūt jie išties yra (3).
+key: tavo
+  decomp: * tavo *
+    reasmb: Kodėl tau rūpi mano (2)?
+    reasmb: O kaip dėl tavo paties (2)?
+    reasmb: Ar tau neramu dėl kažkieno kito (2)?
+    reasmb: Tikrai? Mano (2)?
+key: buvau 2
+  decomp: * ar aš buvau *
+    reasmb: O kas jeigu buvai (2)?
+    reasmb: Ar manai, kad buvai (2)?
+    reasmb: Ar buvai (2)?
+    reasmb: Ką tai reikštų, jei būtum buvęs (2)?
+    reasmb: Ką (2) tau reiškia?
+    reasmb: goto ką
+  decomp: * aš buvau *
+    reasmb: Tikrai buvai?
+    reasmb: Kodėl dabar man sakai, kad buvai (2)?
+    reasmb: Galbūt aš jau žinau, kad tu buvai (2).
+  decomp: * tu buvai *
+    reasmb: Ar norėtum tikėti, kad aš buvau (2)?
+    reasmb: Kas tave verčia manyti, kad aš buvau (2)?
+    reasmb: Kaip tu manai?
+    reasmb: Galbūt aš buvau (2).
+    reasmb: O kas jeigu tokia būčiau?
+key: man
+  decomp: * man *reikia *
+    reasmb: Kaip tave paveiktų tai, kad gautum (3)?
+    reasmb: Kodėl tu nori (3)?
+    reasmb: Kas jeigu greitai gautum (3)?
+    reasmb: Kas jeigu niekada negautum (3)?
+    reasmb: Kokią reikšme tau turėtų (3)?
+    reasmb: Ką bendro su mūsų pokalbiu turi tai, kad tu nori (3)?
+  decomp: * man *@liūdnas *
+    reasmb: Man labai gaila girdėti, kad tau (3).
+    reasmb: Ar manai, kad mūsų pokalbis padės, kad (3) nebebūtų?
+    reasmb: Suprantu, kad tau gali būti (3).
+    reasmb: Gal gali papasakoti, kodėl tau (3)?
+key: aš
+  decomp: * aš @trokštu *
+    reasmb: Kaip tave paveiktų tai, kad gautum (3)?
+    reasmb: Kodėl tu nori (3)?
+    reasmb: Kas jeigu greitai (3) gautum?
+    reasmb: Kas jeigu (3) niekada negautum?
+    reasmb: Kokią reikšme tau turėtų (3)?
+    reasmb: Ką bendro su mūsų pokalbiu turi tai, kad tu nori (3)?
+  decomp: * aš * @liūdnas *
+    reasmb: Man labai gaila girdėti, kad tu esi (3).
+    reasmb: Ar manai, kad mūsų pokalbis tau padės nebebūti (3)?
+    reasmb: Žinau, kaip sunku būti (3).
+    reasmb: Gal gali papasakoti, kas tave padarė (3)?
+  decomp: * aš * @laimingas *
+    reasmb: Ar aš padėjau tau pasijusti (3)?
+    reasmb: Ar mūsų pokalbis padarė tave (3)?
+    reasmb: Kas būtent dabar tave daro (3)?
+    reasmb: Gal gali papasakoti, kodėl staiga jautiesi (3)?
+  decomp: * aš buvau *
+    reasmb: goto buvau
+  decomp: * aš @tikiu *aš *
+    reasmb: Taip tikrai manai?
+    reasmb: Bet visgi dvejoji, dėl to ar (4).
+    reasmb: Ar abejoji dėl to, kad tu (4)?
+  decomp: * aš* @tikiu *tu *
+    reasmb: goto tu
+  decomp: * aš esu *
+    reasmb: Ar su manimi kalbiesi, nes esi (2)?
+    reasmb: Kaip ilgai esi (2)?
+    reasmb: Ar manai, kad normalu yra būti (2)?
+    reasmb: Ar tau patinka būti (2)?
+  decomp: * aš @negaliu *
+    reasmb: Kodėl manai, kad negali (3)?
+    reasmb: Ar jau bandei?
+    reasmb: Galbūt tau pavyktų (3) dabar.
+    reasmb: Ar tikrai norėtum galėti (3)?
+  decomp: * aš jaučiuosi *
+    reasmb: Papasakok man daugiau apie savo jausmus.
+    reasmb: Ar dažnai jautiesi (2)?
+    reasmb: Ar tau būna gera, kai jautiesi (2)?
+    reasmb: Ką prisimeni, kai jautiesi (2)?
+  decomp: * aš tave *
+    reasmb: Galbūt tavo svajonėse mes (2) vienas kitą.
+    reasmb: Ar tu nori mane (2)?
+    reasmb: Atrodo, kad tau reikia mane (2)?
+    reasmb: Ar tu (2) ką nors kitą?
+  decomp: * aš * tave *
+    reasmb: Galbūt tavo svajonėse mes (2) vienas kitą.
+    reasmb: Ar tu nori mane (2)?
+    reasmb: Atrodo, kad tau reikia mane (2)?
+    reasmb: Ar tu (2) ką nors kitą?
+  decomp: * aš tavęs *
+    reasmb: Galbūt tavo svajonėse mes (2) vienas kito.
+    reasmb: Ar tu nori manęs (2)?
+    reasmb: Atrodo, kad tau reikia manęs (2)?
+    reasmb: Ar tu (2) ko nors kito?
+  decomp: * aš * tavęs *
+    reasmb: Galbūt tavo svajonėse mes (2) vienas kito.
+    reasmb: Ar tu nori manęs (2)?
+    reasmb: Atrodo, kad tau reikia manęs (2)?
+    reasmb: Ar tu (2) ko nors kito?
+  decomp: * aš *
+    reasmb: Ar tu tikrai (2)?
+    reasmb: Kodėl tu (2)?
+    reasmb: Kodėl sakai, kad (2)?
+    reasmb: Kaip dėl to jautiesi?
+    reasmb: Sakai (2)?
+    reasmb: Ar gali papasakoti daugiau?
+    reasmb: Įdomu.
+key: tu
+  decomp: * man primeni *
+    reasmb: goto panaši
+  decomp: * tu esi *
+    reasmb: Kas tave verčia manyti, kad esu (2)?
+    reasmb: Ar tau malonu manyti, kad aš esu (2)?
+    reasmb: Ar kartais galvoji, kad norėtum būti (2)?
+    reasmb: Galbūt tu norėtum būti (2).
+  decomp: * tu manęs *
+    reasmb: Kodėl manai, kad aš tavęs (2)?
+    reasmb: Tau patinka galvoti, kad aš tavęs (2), ar ne?
+    reasmb: Kas verčia tave manyti, kad aš tavęs (2)?
+    reasmb: Tikrai? Aš tavęs (2)?
+    reasmb: Ar norėtum tikėti, kad aš tavęs (2)?
+    reasmb: Tarkim, kad aš tavęs (2). Ką tai tau reikštų?
+    reasmb: Ar kas nors dar mano, kad aš tavęs (2)?
+  decomp: * tu* manęs *
+    reasmb: Kodėl manai, kad aš tavęs (2)?
+    reasmb: Tau patinka galvoti, kad aš tavęs (2), ar ne?
+    reasmb: Kas verčia tave manyti, kad aš tavęs (2)?
+    reasmb: Tikrai? Aš tavęs (2)?
+    reasmb: Ar norėtum tikėti, kad aš tavęs (2)?
+    reasmb: Tarkim, kad aš tavęs (2). Ką tai tau reikštų?
+    reasmb: Ar kas nors dar mano, kad aš tavęs (2)?
+  decomp: * tu mane *
+    reasmb: Kodėl manai, kad aš tave (2)?
+    reasmb: Tau patinka galvoti, kad aš tave (2), ar ne?
+    reasmb: Kas verčia tave manyti, kad aš tave (2)?
+    reasmb: Tikrai? Aš tave (2)?
+    reasmb: Ar norėtum tikėti, kad aš tave (2)?
+    reasmb: Tarkim, kad aš tave (2). Ką tai tau reikštų?
+    reasmb: Ar kas nors dar mano, kad aš tave (2)?
+  decomp: * tu* mane *
+    reasmb: Kodėl manai, kad aš tave (2)?
+    reasmb: Tau patinka galvoti, kad aš tave (2), ar ne?
+    reasmb: Kas verčia tave manyti, kad aš tave (2)?
+    reasmb: Tikrai? Aš tave (2)?
+    reasmb: Ar norėtum tikėti, kad aš tave (2)?
+    reasmb: Tarkim, kad aš tave (2). Ką tai tau reikštų?
+    reasmb: Ar kas nors dar mano, kad aš tave (2)?
+  decomp: * tu *
+    reasmb: Mes kalbames apie tave, ne mane.
+    reasmb: Oi, aš (2)?
+    reasmb: Tu juk ne apie mane kalbi?
+    reasmb: Kaip jautiesi dabar?
+key: tau
+  decomp: * tau *
+    reasmb: Man?
+    reasmb: Oi, man (2)?
+    reasmb: Užteks apie mane, papasakok daugiau apie save.
+    reasmb: Gerai.
+key: taip
+  decomp: *
+    reasmb: Skamba užtikrintai.
+    reasmb: Tikrai?
+    reasmb: Aišku.
+    reasmb: Suprantu.
+key: ne
+  decomp: *
+    reasmb: Ar sakai "ne" tik tam, kad paneigtum?
+    reasmb: Tikrai ne?
+    reasmb: Kiek negatyvumo.
+    reasmb: Kodėl ne?
+    reasmb: Kaip negatyvu.
+    reasmb: Kodėl "ne"?
+key: mano 2
+  decomp: $ * mano *
+    reasmb: Pasikalbėkim daugiau apie tai, kodėl tavo (2).
+    reasmb: Anksčiau sakei, kad tavo (2).
+    reasmb: O tavo (2).
+    reasmb: Ar tai kaip nors susiję su tuo, kad tavo (2)?
+  decomp: * mano* @šeima *
+    reasmb: Papasakok daugiau apie savo šeimą.
+    reasmb: Kas dar tavo šeimoje (4)?
+    reasmb: Tavo (3)?
+    reasmb: Ką dar prisimeni, kai galvoji apie savo (3)?
+  decomp: * mano *
+    reasmb: Tavo (2)?
+    reasmb: Kodėl sakai tavo (2)?
+    reasmb: Ar tai tau primena ką nors kita, kas tau priklauso?
+    reasmb: Kokią svarbą tai tau turi?
+key: gali
+  decomp: * ar gali *
+    reasmb: Tu manai, kad aš galiu (2)?
+    reasmb: goto ką
+    reasmb: Nori, kad galėčiau (2).
+    reasmb: Galbūt tai tu norėtum sugebėti (2).
+key: galiu
+  decomp: * ar aš galiu *
+    reasmb: Ar gali (2) ar ne, priklauso daugiau nuo tavęs nei manęs. 
+    reasmb: Ar norėtum galėti (2)?
+    reasmb: Galbūt tu nėi nenori (2).
+    reasmb: goto ką
+key: ką
+  decomp: *
+    reasmb: Kodėl klausi?
+    reasmb: Ar tai tave dominantis klausimas?
+    reasmb: Ką tu iš tikrųjų nori sužinoti?
+    reasmb: Ar dažnai keli tokius klausimus?
+    reasmb: Koks atsakymas tau patiktų labiausiai?
+    reasmb: Kaip tau atrodo?
+    reasmb: Apie ką galvoji, kai to klausi?
+    reasmb: Ar kada jau esi klausęs tokių klausimų?
+    reasmb: Ar jau esi to klausęs kieno nors kito?
+key: nes
+  decomp: *
+    reasmb: Ar tai tikroji to priežastis?
+    reasmb: Ar į galvą neateina kitų priežasčių?
+    reasmb: Ar tokia priežastis galėtų paaiškinti dar ką nors?
+    reasmb: Kokios dar galėtų būti to priežastys?
+key: kodėl
+  decomp: * kodėl tu *
+    reasmb: Ar tu manai, kad aš (2)?
+    reasmb: Galbūt tai manęs laukia ateityje.
+    reasmb: Gal tu pats turėtum (2)?
+    reasmb: Tu nori, kad aš (2)?
+    reasmb: goto ką
+  decomp: * kodėl *negaliu *
+    reasmb: Ar manai, kad turėtum galėti (2)?
+    reasmb: Ar norėtum galėti (2)?
+    reasmb: Ar manai, kad tai padės tau (2)?
+    reasmb: Kaip manai, kodėl negali (2)?
+    reasmb: goto ką
+  decomp: *
+    reasmb: goto ką
+key: visi 2
+  decomp: * @visi *
+    reasmb: Tikrai? (2)?
+    reasmb: Negali būti, kad (2).
+    reasmb: Ar galėtum ką nors konkrečiau išskirti?
+    reasmb: Kas, pavyzdžiui?
+    reasmb: Ar tu galvoji apie konkretų žmogų?
+    reasmb: Kas tie visi?
+    reasmb: Galbūt tarp jų yra koks nors tau ypatingas žmogus?
+    reasmb: Tu juk galvoji apie konkretų žmogų, ar ne?
+    reasmb: Būtent apie kokį asmenį tu kalbi?
+key: kiekvienas 2
+  decomp: *
+    reasmb: goto visi
+key: niekas 2
+  decomp: *
+    reasmb: goto visi
+key: nė vienas 2
+  decomp: *
+    reasmb: goto visi
+key: visada 1
+  decomp: *
+    reasmb: Gal galėtum pateikti konkretų pavyzdį?
+    reasmb: Kada?
+    reasmb: Apie kokį įvykį galvoji?
+    reasmb: Tikrai? Visada?
+key: panaši 10
+  decomp: *
+    reasmb: Kaip?
+    reasmb: Kokius panašumus matai?
+    reasmb: Ką tokie panašumai tau sako?
+    reasmb: Kokių kitų sąsajų pastebi?
+    reasmb: Kaip manai, ką tokie panašumai galėtų reikšti?
+    reasmb: Kaip tai, tavo manymu, susiję?
+    reasmb: Ar čia tikrai galėtų būti kažkokia sąsaja?
+    reasmb: Būtent kaip?
+key: panašus 10
+  decomp: *
+    reasmb: goto panaši
+key: lyg 10
+  decomp: * @būti *lyg*
+    reasmb: goto panaši
