@@ -1,57 +1,90 @@
 import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+
+import org.json.*;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class Conjugator {
 
+    public static void main(String[] args) throws IOException {
+        Conjugator c = new Conjugator("einu miegoti");
+    }
+
     Noun noun = null;
-    Verb word = null;
+    Verb verb = null;
     Adjective adj = null;
     Pronoun pn = null;
     ArrayList<String> lines;
 
-    /**
-     * Take a string of words, write them into a txt file, analyse them with with a morphological annotator
-     * accessed through python script, throw that into an out.txt
-     * @param s the string of words
-     * @throws IOException
-     */
-    public Conjugator(String s) throws IOException, URISyntaxException {
+    public Conjugator(String s) throws IOException {
 
-        File file = new File("src/main/resources/analyse.txt");
-        PrintWriter pw = new PrintWriter(file, "UTF-8");
-        pw.println(s);
-        pw.close();
-
-
-        Process process = Runtime.getRuntime().exec("python src/main/java/teksto_lemavimas.py src/main/resources/analyse src/main/resources/out");
-        BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-
-        String line;
-        while ((line = stdError.readLine()) != null) {
-            System.out.println(line);
-        }
-        fileToList();
-    }
-
-    /**
-     * Put the content of the output files that the annotator produced into a list
-     * @return a list of lines from the text file the annotator produced
-     * @throws IOException
-     * @throws FileNotFoundException
-     */
-
-    private ArrayList<String> fileToList() throws IOException, FileNotFoundException, URISyntaxException {
-
-        BufferedReader iS = new BufferedReader(new InputStreamReader(new FileInputStream(new File("src/main/resources/out.txt"))));
-        String line;
         lines = new ArrayList<>();
-        while ((line = iS.readLine()) != null) {
-            lines.add(line);
+
+        //connect to the web service
+        URL url = new URL("http://donelaitis.vdu.lt/NLP/nlp.php");
+
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setDoOutput(true); // Triggers POST.
+        connection.setRequestProperty("accept", "application/json;charset=utf-8");
+        connection.setRequestProperty("Accept-Charset", "utf-8");
+
+        Map<String,String> param = new HashMap<>();
+        param.put("tekstas", s);
+        param.put("tipas", "anotuoti");
+        param.put("pateikti", "LM");
+        param.put("veiksmas", "Analizuoti");
+
+        StringJoiner sj = new StringJoiner("&");
+        for(Map.Entry<String,String> entry : param.entrySet())
+            sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
+                    + URLEncoder.encode(entry.getValue(), "UTF-8"));
+        byte[] out = sj.toString().getBytes(StandardCharsets.UTF_8);
+
+        OutputStream os = connection.getOutputStream();
+
+        os.write(out);
+        os.flush();
+        os.close();
+
+
+        int responseCode = connection.getResponseCode();
+
+        if (responseCode == HttpURLConnection.HTTP_OK) { //success
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    connection.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            //parse html string
+            String[] str = response.toString().split("<");
+            lines = new ArrayList<>();
+            for (String st : str){
+                if (st.startsWith("word")){
+                    String[] spl = st.split("\"");
+                    lines.add(spl[1] + " " + spl[3] + " " + spl[5]);
+                }
+            }
+
+        } else {
+            System.out.println("POST request did not work.");
         }
-        return lines;
+
     }
+
 
     /**
      * Check if a verb is reflexive
@@ -59,7 +92,7 @@ public class Conjugator {
      * @return true if the verb is reflexive
      */
     private boolean isReflexive(String s) {
-        if (s.equals("sngr.")) {
+        if (s.equals("y")) {
             return true;
         }
         return false;
@@ -72,15 +105,12 @@ public class Conjugator {
     public Pronoun findPronoun() {
         ArrayList<String> discard = new ArrayList<>(Arrays.asList("tu", "aš", "mes"));
         for (String s : lines) {
-            String forNow = "";
             String[] temp = s.trim().split("\\s+");
-            for (int i = 2; i < temp.length; i++) {
-                forNow += temp[i];
-            }
-            String[] timp = forNow.trim().split(",");
+            String word = temp[0];
+            String lemma = temp[1];
 
-            if (timp[0].equals("įv.") && !discard.contains(temp[1])) {
-                pn = new Pronoun(temp[0], temp[1], timp[1], timp[2], timp[3]);
+            if (temp[2].substring(0,1).equals("P") && !discard.contains(lemma)) {
+                pn = new Pronoun(word, lemma, temp[2].substring(2,3), temp[2].substring(3,4), temp[2].substring(4, 5));
             }
         }
         return pn;
@@ -92,15 +122,12 @@ public class Conjugator {
      */
     public Adjective findAdjective() {
         for (String s : lines) {
-            String forNow = "";
             String[] temp = s.trim().split("\\s+");
-            for (int i = 2; i < temp.length; i++) {
-                forNow += temp[i];
-            }
-            String[] timp = forNow.trim().split(",");
+            String word = temp[0];
+            String lemma = temp[1];
 
-            if (timp[0].equals("bdv.")) {
-                adj = new Adjective(temp[0], temp[1], timp[4], timp[5], timp[6]);
+            if (temp[2].substring(0,1).equals("A")) {
+                adj = new Adjective(word, lemma, temp[2].substring(3,4), temp[2].substring(4,5), temp[2].substring(5,6));
             }
         }
         return adj;
@@ -112,15 +139,12 @@ public class Conjugator {
      */
     public Noun findNoun() {
         for (String s : lines) {
-            String forNow = "";
             String[] temp = s.trim().split("\\s+");
-            for (int i = 2; i < temp.length; i++) {
-                forNow += temp[i];
-            }
-            String[] timp = forNow.trim().split(",");
+            String word = temp[0];
+            String lemma = temp[1];
 
-            if (timp[0].equals("dkt.")) {
-                noun = new Noun(temp[0], temp[1], timp[1], timp[2], timp[3]);
+            if (temp[2].substring(0,1).equals("N")) {
+                noun = new Noun(word, lemma, temp[2].substring(2,3), temp[2].substring(3,4), temp[2].substring(4, 5));
             }
         }
         return noun;
@@ -132,21 +156,16 @@ public class Conjugator {
      */
     public Verb findVerb() {
         for (String s : lines) {
-            String forNow = "";
             String[] temp = s.trim().split("\\s+");
-            for (int i = 2; i < temp.length; i++) {
-                forNow += temp[i];
-            }
-            String[] timp = forNow.trim().split(",");
+            String word = temp[0];
+            String lemma = temp[1];
 
-            if (timp[0].equals("vksm.") && timp.length > 6) {
-                word = new Verb(temp[0], temp[1], isReflexive(timp[2]), timp[3], timp[4], timp[6]);
-            } else if (timp[0].equals("vksm.") && timp.length < 7) {
-                word = new Verb(temp[0], temp[1], isReflexive(timp[2]), timp[3], "none", timp[5]);
+            if (temp[2].substring(0,1).equals("N")) {
+                verb = new Verb(word, lemma, isReflexive(temp[2].substring(11,12)), temp[2].substring(3,4), temp[2].substring(4, 5), temp[2].substring(12, 13));
             }
         }
 
-        return word;
+        return verb;
     }
 
     /**
@@ -160,8 +179,8 @@ public class Conjugator {
         String vksm = v.getVerb();
 
 
-        if (v.getMood().equals("tar.n.")) {
-            if (v.getPerson().equals("1asm.")) {
+        if (v.getMood().equals("s")) {
+            if (v.getPerson().equals("1")) {
                 if (vksm.endsWith("si") && v.getRflx()) {
                     vksm = vksm.substring(0, vksm.length() - 6) + "tumeisi";
                 } else {
@@ -169,7 +188,7 @@ public class Conjugator {
                 }
             }
 
-            if (v.getPerson().equals("2asm.") || v.getPerson().equals("3asm.")) {
+            if (v.getPerson().equals("2") || v.getPerson().equals("3")) {
                 if (vksm.endsWith("si")) {
                     vksm = vksm.substring(0, vksm.length() - 7) + "čiausi";
                 } else {
@@ -178,9 +197,9 @@ public class Conjugator {
             }
         }
 
-        if (v.getMood().equals("tiesiog.n.")) {
-            if (v.getTense().equals("es.l.")) {
-                if (v.getPerson().equals("1asm.")) {
+        if (v.getMood().equals("i")) {
+            if (v.getTense().equals("p")) {
+                if (v.getPerson().equals("1")) {
                     if (vksm.endsWith("si") && v.getRflx()) {
                         if (cnjg.equals("-disi,-dėjosi")) {
                             vksm = vksm.substring(0, vksm.length() - 6) + "iesi";
@@ -226,7 +245,7 @@ public class Conjugator {
                 }
 
                 //the annotator often recognises verbs in 2nd person as 3rd person
-                if (v.getPerson().equals("2asm.") || v.getPerson().equals("3asm."))
+                if (v.getPerson().equals("2") || v.getPerson().equals("3"))
                 {
                     if (vksm.endsWith("si") && v.getRflx()) {
                         if (cnjg.equals("-disi,-dėjosi")) {
@@ -292,8 +311,8 @@ public class Conjugator {
                     }
                 }
 
-            } else if (v.getTense().equals("būt.k.l.")) {
-                if (v.getPerson().equals("1asm.")) {
+            } else if (v.getTense().equals("a")) {
+                if (v.getPerson().equals("1")) {
                     if (vksm.endsWith("si") && v.getRflx()) {
                         if (cnjg.equals("-disi,-dėjosi")) {
                             vksm = vksm.substring(0, vksm.length() - 4) + "aisi";
@@ -340,7 +359,7 @@ public class Conjugator {
 
                 }
                 //the annotator often recognises verbs in 2nd person as 3rd person
-                if (v.getPerson().equals("2asm.") || v.getPerson().equals("3asm.")) {
+                if (v.getPerson().equals("2") || v.getPerson().equals("3")) {
                     if (vksm.endsWith("si") && v.getRflx()) {
                         if (cnjg.equals("-disi,-dėjosi")) {
                             vksm = vksm.substring(0, vksm.length() - 4) + "ausi";
@@ -409,8 +428,8 @@ public class Conjugator {
                     }
                 }
 
-            } else if (v.getTense().equals("būt.d.l.")) {
-                if (v.getPerson().equals("1asm.")) {
+            } else if (v.getTense().equals("q")) {
+                if (v.getPerson().equals("1")) {
                     if (vksm.endsWith("si") && v.getRflx()) {
                         vksm = vksm.substring(0, vksm.length() - 4) + "aisi";
                     } else {
@@ -418,7 +437,7 @@ public class Conjugator {
                     }
                 }
                 //the annotator often recognises verbs in 2nd person as 3rd person
-                if (v.getPerson().equals("2asm.") || v.getPerson().equals("3asm.")) {
+                if (v.getPerson().equals("2") || v.getPerson().equals("3")) {
                     if (vksm.endsWith("si") && v.getRflx()) {
                         vksm = vksm.substring(0, vksm.length() - 4) + "aisi";
                     } else {
@@ -426,8 +445,8 @@ public class Conjugator {
                     }
 
                 }
-            } else if (v.getTense().equals("būs.l.")) {
-                if (v.getPerson().equals("1asm.")) {
+            } else if (v.getTense().equals("f")) {
+                if (v.getPerson().equals("1")) {
                     if (vksm.endsWith("si") && v.getRflx()) {
                         vksm = vksm.substring(0, vksm.length() - 5) + "iesi";
                     } else {
@@ -435,7 +454,7 @@ public class Conjugator {
                     }
                 }
                 //the annotator often recognises verbs in 2nd person as 3rd person
-                if (v.getPerson().equals("2asm.") || v.getPerson().equals("3asm.")) {
+                if (v.getPerson().equals("2") || v.getPerson().equals("3")) {
                     if (vksm.endsWith("si") && v.getRflx()) {
                         vksm = vksm.substring(0, vksm.length() - 4) + "iuosi";
                     } else {
@@ -457,8 +476,8 @@ public class Conjugator {
         String cnjg = v.getLemma().substring(v.getLemma().indexOf("(") + 1, v.getLemma().length() - 1);
         String vksm = v.getVerb();
 
-        if (v.getTense().equals("es.l.")) {
-            if (v.getPerson().equals("1asm.")) {
+        if (v.getTense().equals("p")) {
+            if (v.getPerson().equals("1")) {
                 if (vksm.endsWith("si") && v.getRflx()) {
 
                     if (cnjg.equals("-disi,-dėjosi")) {
@@ -507,8 +526,8 @@ public class Conjugator {
                 }
 
             }
-        } else if (v.getTense().equals("būt.k.l.")) {
-            if (v.getPerson().equals("1asm.")) {
+        } else if (v.getTense().equals("a")) {
+            if (v.getPerson().equals("1")) {
                 if (vksm.endsWith("si") && v.getRflx()) {
                     if (cnjg.equals("-disi,-dėjosi")) {
                         vksm = vksm.substring(0, vksm.length() - 4) + "omės";
@@ -547,16 +566,16 @@ public class Conjugator {
                     vksm = vksm.substring(0, vksm.length() - 4) + "tėme";
                 }
             }
-        } else if (v.getTense().equals("būt.d.l.")) {
-            if (v.getPerson().equals("1asm.")) {
+        } else if (v.getTense().equals("q")) {
+            if (v.getPerson().equals("1")) {
                 if (vksm.endsWith("si") && v.getRflx()) {
                     vksm = vksm.substring(0, vksm.length() - 4) + "omės";
                 } else {
                     vksm = vksm.substring(0, vksm.length() - 1) + "ome";
                 }
             }
-        } else if (v.getTense().equals("būs.l.")) {
-            if (v.getPerson().equals("1asm.")) {
+        } else if (v.getTense().equals("f")) {
+            if (v.getPerson().equals("1")) {
                 if (vksm.endsWith("si") && v.getRflx()) {
                     vksm = vksm.substring(0, vksm.length() - 5) + "imės";
                 } else {
@@ -578,7 +597,7 @@ public class Conjugator {
         String cnjg = v.getLemma().substring(v.getLemma().indexOf("(") + 1, v.getLemma().length() - 1);
         String vksm = v.getVerb();
 
-        if (v.getTense().equals("es.l.")) {
+        if (v.getTense().equals("p")) {
             if (vksm.endsWith("si") && v.getRflx()) {
                 if (cnjg.equals("-disi,-dėjosi")) {
                     vksm = vksm.substring(0, vksm.length() - 4) + "ėčiausi";
